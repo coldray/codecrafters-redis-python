@@ -9,8 +9,8 @@ def main():
     client_connection, _ = server_socket.accept()  # wait for client
 
     while True:
-    	client_connection.recv(1024)  # wait for client to send data
-	    client_connection.send(b"+PONG\r\n")
+        client_connection.recv(1024)  # wait for client to send data
+        client_connection.send(b"+PONG\r\n")
 
 if __name__ == "__main__":
     main()
