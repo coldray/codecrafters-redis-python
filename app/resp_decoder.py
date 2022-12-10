@@ -2,7 +2,11 @@ class ConnectionBuffer:
 	def __init__(self, connection):
 		self.connection = connection
 		self.buffer = b''
+<<<<<<< HEAD
 	def read_util_delimiter(self, delimiter):
+=======
+	def read_until_delimiter(self, delimiter):
+>>>>>>> c4d636b (implement echo)
 		while delimiter not in self.buffer:
 			data = self.connection.recv(1024)
 
@@ -49,6 +53,16 @@ class RESPDecoder:
 	def decode_array(self):
 		result = []
 		array_length = int(self.connection.read_util_delimiter(b"\r\n"))
+		return self.connection.read_until_delimiter(b"\r\n")
+
+	def decode_bulk_string(self):
+		bulk_string_length = int(self.connection.read_until_delimiter(b"\r\n"))
+		data = self.connection.read(bulk_string_length)
+		assert self.connection.read_until_delimiter(b"\r\n") == b""  # delimiter should be immediately after string
+		return data
+	def decode_array(self):
+		result = []
+		array_length = int(self.connection.read_until_delimiter(b"\r\n"))
 
 		for _ in range(array_length):
 			result.append(self.decode())
