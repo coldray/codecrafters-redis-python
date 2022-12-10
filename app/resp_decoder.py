@@ -2,11 +2,8 @@ class ConnectionBuffer:
 	def __init__(self, connection):
 		self.connection = connection
 		self.buffer = b''
-<<<<<<< HEAD
-	def read_util_delimiter(self, delimiter):
-=======
+
 	def read_until_delimiter(self, delimiter):
->>>>>>> c4d636b (implement echo)
 		while delimiter not in self.buffer:
 			data = self.connection.recv(1024)
 
