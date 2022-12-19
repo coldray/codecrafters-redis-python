@@ -3,6 +3,7 @@ import threading
 import socket
 from .resp_decoder import RESPDecoder
 
+dict = {}
 
 def handle_connection(client_connection):
     while True:
@@ -13,6 +14,15 @@ def handle_connection(client_connection):
                client_connection.send(b"+PONG\r\n")
            elif command == b"echo":
                client_connection.send(b"$%d\r\n%b\r\n" % (len(args[0]), args[0]))
+           elif command == b"get":
+           		value = dict.get(args[0])
+           		if value == None:
+           			client_connection.send(b"+(nil)\r\n")
+           		else:
+           			client_connection.send(b"$%d\r\n%b\r\n" % (len(value), value))
+           elif command == b"set":
+           		dict[args[0]] = args[1]
+           		client_connection.send(b"+OK\r\n")
            else:
                client_connection.send(b"-ERR unknown command\r\n")
         except ConnectionError:
